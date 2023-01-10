@@ -1,5 +1,7 @@
-import express, { Request, Response } from 'express'
+import express, { Request, response, Response } from 'express'
 import cors from 'cors'
+import { courses } from './database'
+import { TCourse } from './types'
 
 const app = express()
 
@@ -13,3 +15,44 @@ app.listen(3003, () => {
 app.get('/ping', (req: Request, res: Response) => {
     res.send('Pong!')
 })
+
+
+//Requisição GET sem query
+app.get('/courses', (req: Request, res: Response) => {
+    res.status(200).send(courses)
+})
+
+
+//Requisição GET com query
+app.get("/courses/search", (req: Request, res: Response) => {
+
+    const q = req.query.q as string
+
+    const coursesFilter =  courses.filter (
+        (course) => course.name.toLowerCase().includes(q.toLowerCase()))
+    res.status(200).send(coursesFilter)
+})
+
+
+//Requisição POST com body
+app.post('/courses', (req: Request, res: Response) => {
+
+    const id = req.body.id
+    const name = req.body.name
+    const lessons = req.body.lessons
+    const stack = req.body.stack
+
+    const newCourse: TCourse = {
+        id,
+        name,
+        lessons,
+        stack
+    }
+
+    courses.push(newCourse)
+    res.status(201).send("Curso registrado com sucesso")
+})
+
+
+//Fixação nova entidade = students
+

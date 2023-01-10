@@ -9,3 +9,11 @@ export type TCourse = {
     lessons: number,
     stack: COURSE_STACK
 }
+
+
+//Fixação nova entidade = students
+export type TStudent = {
+    id: string, 
+    name: string,
+    age: number
+}
